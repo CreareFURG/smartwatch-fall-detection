@@ -29,7 +29,7 @@ import java.util.concurrent.Executor;
 import javax.security.auth.login.LoginException;
 
 public class MainActivity extends Activity {
-
+    // Variaveis globais
     private Button button;
     private ActivityMainBinding binding;
     public float accX, accY, accZ, gyrX, gyrY, gyrZ; // Accelerometer and Gyroscope values
