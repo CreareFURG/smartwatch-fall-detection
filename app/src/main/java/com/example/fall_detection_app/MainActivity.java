@@ -30,6 +30,7 @@ import javax.security.auth.login.LoginException;
 
 public class MainActivity extends Activity {
     // Variaveis globais
+    //outro comentário
     private Button button;
     private ActivityMainBinding binding;
     public float accX, accY, accZ, gyrX, gyrY, gyrZ; // Accelerometer and Gyroscope values
