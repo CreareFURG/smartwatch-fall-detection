@@ -29,8 +29,6 @@ import java.util.concurrent.Executor;
 import javax.security.auth.login.LoginException;
 
 public class MainActivity extends Activity {
-    // Variaveis globais
-    //outro comentário
     private Button button;
     private ActivityMainBinding binding;
     public float accX, accY, accZ, gyrX, gyrY, gyrZ; // Accelerometer and Gyroscope values
@@ -60,7 +58,7 @@ public class MainActivity extends Activity {
     public void writeHeader(){
         DateFormat dateFormatLog = new SimpleDateFormat("'D'dd_MM_yyyy'_T'HH_mm_ss");
         String logTime = dateFormatLog.format(Calendar.getInstance().getTime());
-        String header = "dateTime, accX, accY, accZ, gyrX, gyrY, gyrZ, gravity, gyrMagnitude, output" + "\n";
+        String header = "dateTime,accX,accY,accZ,gyrX,gyrY,gyrZ,gravity,gyrMagnitude,output" + "\n";
         File root = new File(Environment.getStorageDirectory(), "emulated/0/Documents/FallDetectionApp");
         if (!root.exists()) {
             root.mkdir();
@@ -107,7 +105,7 @@ public class MainActivity extends Activity {
         public void writeDataToFile(){
             DateFormat dateFormatLog = new SimpleDateFormat("dd-MM-yy'T'HH:mm:ss.SSSS");
             String timeValue = dateFormatLog.format(Calendar.getInstance().getTime());
-            String data = timeValue + ", " + accX + ", " + accY + ", " + accZ + ", " + gyrX + ", " + gyrY + ", " + gyrZ + ", " + gravity + ", " + gyrMagnitude + ", " + output + "\n";
+            String data = timeValue + "," + accX + "," + accY + "," + accZ + "," + gyrX + "," + gyrY + "," + gyrZ + "," + gravity + "," + gyrMagnitude + "," + output + "\n";
             try {
                 fileOutputStream.write(data.getBytes(StandardCharsets.US_ASCII));
                 fileOutputStream.flush();
