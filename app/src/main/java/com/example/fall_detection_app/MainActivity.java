@@ -10,6 +10,7 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
@@ -30,6 +31,9 @@ import javax.security.auth.login.LoginException;
 
 public class MainActivity extends Activity {
     private Button button;
+    private Button resetButton;
+    private TextView fallTextView;
+    private String fallText;
     private ActivityMainBinding binding;
     public float accX, accY, accZ, gyrX, gyrY, gyrZ; // Accelerometer and Gyroscope values
     public float gravity; // Gravity force
@@ -51,8 +55,10 @@ public class MainActivity extends Activity {
         writeHeader(); // Write header to file
         SensorThread sensorThread = new SensorThread(); // Create a new thread for sensor data collection
         sensorThread.start();
-        FileTread fileTread = new FileTread(); // Create a new thread for writing data to file
-        fileTread.start();
+        FileThread fileThread = new FileThread(); // Create a new thread for writing data to file
+        fileThread.start();
+        FallDetectionThread fallDetectionThread = new FallDetectionThread(); // Create a new thread for fall detection
+        fallDetectionThread.start();
     }
 
     public void writeHeader(){
@@ -76,7 +82,7 @@ public class MainActivity extends Activity {
         }
     }
 
-    public class FileTread extends Thread {
+    public class FileThread extends Thread {
         @Override
         public void run() {
             while (true) {
@@ -161,6 +167,51 @@ public class MainActivity extends Activity {
             sensorManager.registerListener(this, acc, SensorManager.SENSOR_DELAY_FASTEST);
             Sensor gyr = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
             sensorManager.registerListener(this, gyr, SensorManager.SENSOR_DELAY_FASTEST);
+        }
+    }
+
+    public class FallDetectionThread extends Thread{
+        @Override
+        public void run(){
+            fallTextView = findViewById(R.id.fallTextView);
+            resetButton = findViewById(R.id.resetButton);
+            int seriousFall = 0;
+
+            resetButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            fallTextView.setText("Sem quedas");
+                        }
+                    });
+                }
+            });
+
+
+            while(true){
+                if (gravity > 8.5*9.8){
+                    seriousFall = 1;
+                    fallText = "Queda grave";
+
+                } else if(gravity > 6*9.8) {
+                    seriousFall = 2;
+                    fallText = "Queda leve";
+                }
+
+                if (seriousFall > 0){
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            fallTextView.setText(fallText);
+                        }
+                    });
+                    seriousFall = 0;
+                    try{Thread.sleep(500);}catch(InterruptedException e){System.out.println(e);}
+
+                }
+            }
         }
     }
 }
