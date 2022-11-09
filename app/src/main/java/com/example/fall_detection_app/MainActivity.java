@@ -198,6 +198,7 @@ public class MainActivity extends Activity {
                 } else if(gravity > 6*9.8) {
                     seriousFall = 2;
                     fallText = "Queda leve";
+
                 }
 
                 if (seriousFall > 0){
