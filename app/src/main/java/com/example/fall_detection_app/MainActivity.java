@@ -193,7 +193,8 @@ public class MainActivity extends Activity {
             while(true){
                 if (gravity > 8.5*9.8){
                     seriousFall = 1;
-                    fallText = "Queda grave";
+                    fallText = "Queda grave"
+                    ;
 
                 } else if(gravity > 6*9.8) {
                     seriousFall = 2;
