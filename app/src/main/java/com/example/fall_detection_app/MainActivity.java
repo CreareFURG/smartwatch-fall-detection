@@ -198,6 +198,7 @@ public class MainActivity extends Activity {
                 } else if(gravity > 6*9.8) {
                     seriousFall = 2;
                     fallText = "Queda leve";
+
                 }
 
                 if (seriousFall > 0){
@@ -208,7 +209,7 @@ public class MainActivity extends Activity {
                         }
                     });
                     seriousFall = 0;
-                    try{Thread.sleep(500);}catch(InterruptedException e){System.out.println(e);}
+                    try{Thread.sleep(50);}catch(InterruptedException e){System.out.println(e);}
 
                 }
             }
