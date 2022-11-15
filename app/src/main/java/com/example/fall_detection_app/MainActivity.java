@@ -36,7 +36,7 @@ public class MainActivity extends Activity {
     private String fallText;
     private ActivityMainBinding binding;
     public float accX, accY, accZ, gyrX, gyrY, gyrZ; // Accelerometer and Gyroscope values
-    public float gravity; // Gravity force
+    public float accMagnitude; // Accelerometer magnitude
     public float gyrMagnitude; // Gyroscope magnitude
     public int output = 0;
 
@@ -64,7 +64,7 @@ public class MainActivity extends Activity {
     public void writeHeader(){
         DateFormat dateFormatLog = new SimpleDateFormat("'D'dd_MM_yyyy'_T'HH_mm_ss");
         String logTime = dateFormatLog.format(Calendar.getInstance().getTime());
-        String header = "dateTime,accX,accY,accZ,gyrX,gyrY,gyrZ,gravity,gyrMagnitude,output" + "\n";
+        String header = "dateTime,accX,accY,accZ,gyrX,gyrY,gyrZ,accMagnitude,gyrMagnitude,output" + "\n";
         File root = new File(Environment.getStorageDirectory(), "emulated/0/Documents/FallDetectionApp");
         if (!root.exists()) {
             root.mkdir();
@@ -111,7 +111,7 @@ public class MainActivity extends Activity {
         public void writeDataToFile(){
             DateFormat dateFormatLog = new SimpleDateFormat("dd-MM-yy'T'HH:mm:ss.SSSS");
             String timeValue = dateFormatLog.format(Calendar.getInstance().getTime());
-            String data = timeValue + "," + accX + "," + accY + "," + accZ + "," + gyrX + "," + gyrY + "," + gyrZ + "," + gravity + "," + gyrMagnitude + "," + output + "\n";
+            String data = timeValue + "," + accX + "," + accY + "," + accZ + "," + gyrX + "," + gyrY + "," + gyrZ + "," + accMagnitude + "," + gyrMagnitude + "," + output + "\n";
             try {
                 fileOutputStream.write(data.getBytes(StandardCharsets.US_ASCII));
                 fileOutputStream.flush();
@@ -144,7 +144,7 @@ public class MainActivity extends Activity {
                 accX = event.values[0];
                 accY = event.values[1];
                 accZ = event.values[2];
-                gravity = (float) Math.sqrt(accX * accX + accY * accY + accZ * accZ);
+                accMagnitude = (float) Math.sqrt(accX * accX + accY * accY + accZ * accZ);
             }
 
             // Armazenando valores dos eventos do GIROSCÓPIO
@@ -191,11 +191,11 @@ public class MainActivity extends Activity {
 
 
             while(true){
-                if (gravity > 8.5*9.8){
+                if (accMagnitude > 8.5*9.8 && gyrMagnitude > 8.4){
                     seriousFall = 1;
                     fallText = "Queda grave";
 
-                } else if(gravity > 6*9.8) {
+                } else if(accMagnitude > 6*9.8 && (gyrMagnitude > 4.6 && gyrMagnitude < 8.4)) {
                     seriousFall = 2;
                     fallText = "Queda leve";
 
