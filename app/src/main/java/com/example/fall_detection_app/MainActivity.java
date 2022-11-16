@@ -3,6 +3,7 @@ package com.example.fall_detection_app;
 import android.app.Activity;
 import android.app.BackgroundServiceStartNotAllowedException;
 import android.app.Service;
+import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -39,6 +40,7 @@ public class MainActivity extends Activity {
     public float accMagnitude; // Accelerometer magnitude
     public float gyrMagnitude; // Gyroscope magnitude
     public int output = 0;
+    public String confirm;
 
     public int dataIntervalTime = 50; // Data collection interval time in milliseconds
     File filepath; // File path for storing data
@@ -189,7 +191,7 @@ public class MainActivity extends Activity {
                 }
             });
 
-
+            confirm = "false";
             while(true){
                 if (accMagnitude > 8.5*9.8 && gyrMagnitude > 8.4){
                     seriousFall = 1;
@@ -199,9 +201,21 @@ public class MainActivity extends Activity {
                     seriousFall = 2;
                     fallText = "Queda leve";
 
+                    Intent receive = getIntent();
+                    if (confirm == "true") {
+                        confirm = receive.getStringExtra("confirm");
+                    }
+
+                    Intent intPagina = new Intent(getApplicationContext(), MainActivity2.class);
+                    if (confirm == "false") {
+                        confirm = "true";
+                        intPagina.getStringExtra("confirm");
+                        startActivity(intPagina);
+                        finish();
+                    }
                 }
 
-                if (seriousFall > 0){
+                if (seriousFall < 2){
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
